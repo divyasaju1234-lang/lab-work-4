@@ -1,0 +1,77 @@
+
+
+Lab 4: Intelligent Analysis Tools (GenAI), and your chosen independent focus experiment is Option C: Failure threshold.
+
+
+Focus Experiment: Option C (Failure threshold)
+
+Goal: Plot the dependence of the "failure rate - error rate" on the threshold and select the threshold that minimizes total costs.
+
+---
+
+1. Testable Hypothesis
+
+"There is an optimal retrieval confidence threshold (e.g., 0.7) that minimizes the total operational costs by balancing the high cost of AI errors (hallucinations) against the lower cost of manual operator escalations."
+
+2. Table of Measurements
+. Below is a mock table showing  real data should look like (assuming 1,000 test queries, an operator cost of 200 ₽, and an error cost of 1,200 ₽).
+
+	A	B	C	D	E	F	G	H	I	J	K	L	M	N	O	P	Q	R	S	T	U	V	W	X	Y	Z
+1
+Threshold	
+% Correct (Auto-answered)
+Failure Rate (Error %)
+Refusal Rate (Escalated to Human %)
+Cost of Errors (1,200 ₽)
+Cost of Humans (200 ₽)
+Total Cost																			
+2
+0.5 (Low)	75%	20%	5%	240,000 ₽	10,000 ₽	250,000 ₽																			
+3
+0.7 (Optimal)	65%	5%	30%	60,000 ₽	60,000 ₽	120,000 ₽																			
+4
+0.9 (High)	45%	1%	54%	12,000 ₽	108,000 ₽	120,000 ₽																			
+5
+
+
+
+
+
+Threshold % Correct Failure Rate (Error %) Refusal Rate (Escalated to Human %) Cost of Errors (1,200 ₽) Cost of Humans (200 ₽) Total Cost
+0.5 (Low) 75% 20% 5% 240,000 ₽ 10,000 ₽ 250,000 ₽
+0.7 (Optimal) 65% 5% 30% 60,000 ₽ 60,000 ₽ 120,000 ₽
+0.9 (High) 45% 1% 54% 12,000 ₽ 108,000 ₽ 120,000 ₽
+
+
+
+3. Graph
+
+
+
+· X-axis: Threshold (0.5, 0.7, 0.9)
+· Y-axis: Rate (%) or Total Cost (₽)
+· Lines:
+  · Line 1: Error Rate (Decreases as threshold goes up)
+  · Line 2: Refusal Rate (Increases as threshold goes up)
+  · Line 3: Total Cost (U-shaped curve, finding the minimum point).
+
+4. Conclusion (Observation → Explanation → Solution)
+
+· Observation: The total cost curve is U-shaped. Setting the threshold too low (0.5) increases the error rate significantly, driving up costs. Setting it too high (0.9) causes too many unnecessary escalations to human operators. The minimum total cost occurs at a threshold of approximately 0.7.
+· Explanation: At 0.7, the system filters out the most uncertain/hallucinated answers while still automating the majority of correct queries. The cost savings from reducing AI errors outweigh the cost of paying operators for the remaining 30% of queries.
+· Solution: Implement the RAG system with a strict confidence threshold of 0.7. Queries scoring below this should automatically be routed to a human operator.
+
+5. Limitation
+
+1. Synthetic Corpus: The experiment is based on a synthetic corpus, which may not perfectly reflect the messy, ambiguous nature of real user queries.
+2. Static Costs: The calculation assumes fixed costs for errors (1,200 ₽) and human operators (200 ₽). In reality, the cost of an error can vary wildly (e.g., a simple refund vs. a legal threat).
+3. Confidence Calibration: The assumption that the model's retrieval confidence score perfectly correlates with factual correctness is a simplification (determinism of the base generator).
+
+6. Management Recommendation
+
+· Introduce the assistant? Yes, conditionally.
+· Allowed categories: Fully autonomous mode for standard corporate regulations (e.g., "How many vacation days do I have?"). Operator prompt ,human approves) for complex or personalized financial queries.
+· Cost of error threshold: The system ceases to pay off if the cost of a single error exceeds ~4,000 ₽ without a corresponding drop in error rates.
+· Tracked Metric: Monitor the "Escalation Rate" (Refusal Rate) and "User Satisfaction (CSAT)" on auto-answered queries post-launch.
+
+-
